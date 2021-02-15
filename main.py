@@ -6,5 +6,4 @@ def OpenMainWindow():
 
     main_win.exit()
 
-
 OpenMainWindow()
