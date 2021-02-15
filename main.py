@@ -5,5 +5,5 @@ def OpenMainWindow():
     main_win.show()
 
     main_win.exit()
-#test
+#test02
 OpenMainWindow()
