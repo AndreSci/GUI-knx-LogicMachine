@@ -1,6 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PySide2 import QtCore, QtGui, QtWidgets
-import sys
 
 
 def tableNewButtonXML(SetupMainWindow, NumberRowItem, listNewButtonTab, Name):
