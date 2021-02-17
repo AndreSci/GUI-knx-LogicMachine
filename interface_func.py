@@ -20,35 +20,33 @@ class SetupMainWindow:
         self.uiMwin.setupUi(self.MainWindow)
         self.MenuPositionClick = "Close"
         self.baseDict00 = {}
-        self.ButtonsDate = dict()   #База выключателей полученых из проекта
+        self.ButtonsDate = dict()   # База выключателей полученых из проекта
 
         self.XMLGroupAddress = list()
         self.XMLDatapointSubtype = dict()
 
-        #Обьявляем постройки\этажи\комнаты ------------------------------------
+        # Обьявляем постройки\этажи\комнаты ------------------------------------
         self.Home_info = {'Home1', 'Home2', 'Home3'}
         self.Floor_info = dict()
-        self.Floor_info = {'Home1': {'Floore1', 'Floor2'} , 'Home2': {'Floore1', 'Floor2', 'Floor3'} , 'Home3': {'Floore1'} }
+        self.Floor_info = {'Home1': {'Floore1', 'Floor2'}, 'Home2': {'Floore1', 'Floor2', 'Floor3'}, 'Home3': {'Floore1'}}
+        # ----------------------------------------------------------------------
 
+        # Зона новых кнопок в таблице (XML) ------------------------------------
+        self.listNewButtonTableNumber = list()    # База новых кнопок из таблицы Numbers
+        self.listNewButtonTableAddress = list()  # База новых кнопок из таблицы раздел Address
+        self.feedbackLogButton = dict()  # запись адресов новых кнопок
+        # ----------------------------------------------------------------------
 
-        #----------------------------------------------------------------------
+        # Зона новых кнопок и создание доп. кнопок в таблице (Buttons / Setting Page) --
+        self.listNewButtonTableButtonsSet = list()   # База новых кнопок из таблицы ButtonsSet
+        self.feedbackButtonsSet = dict()  # запись адресов новых кнопок ButtonsSet
+        # ------------------------------------------------------------------------------
 
-        #Зона новых кнопок в таблице (XML) ------------------------------------
-        self.listNewButtonTableNumber = list()    #База новых кнопок из таблицы Numbers
-        self.listNewButtonTableAddress = list() #База новых кнопок из таблицы раздел Address
-        self.feedbackLogButton = dict() #запись адресов новых кнопок
-        #----------------------------------------------------------------------
-
-        #Зона новых кнопок и создание доп. кнопок в таблице (Buttons / Setting Page) --
-        self.listNewButtonTableButtonsSet = list()    #База новых кнопок из таблицы ButtonsSet
-        self.feedbackButtonsSet = dict() #запись адресов новых кнопок ButtonsSet
-        #------------------------------------------------------------------------------
-
-        #Зона новых кнопок в таблице (меню настройки) -------------------------
+        # Зона новых кнопок в таблице (меню настройки) -------------------------
         self.listNewButtonHome = list()
         self.listNewButtonFloor = list()
         self.listNewButtonRoom = list()
-        #----------------------------------------------------------------------
+        # ----------------------------------------------------------------------
 
         self.uiMwin.stackedWidget.setCurrentWidget(self.uiMwin.Page_Index_Home)
         self.uiMwin.stackedWidget_MenuBar_1.setCurrentWidget(self.uiMwin.page_2)
@@ -58,14 +56,14 @@ class SetupMainWindow:
         self.uiMwin.Btn_LogPage_inf.clicked.connect(self.changePageLogs)
         self.uiMwin.Btn_SettingPage.clicked.connect(self.changePageSetting)
         self.uiMwin.Btn_Menu.clicked.connect(self.MenuOpenClose)
-        #Кнопка открытия списка домов -------
-        self.uiMwin.Btn_Home.clicked.connect(self.btnHomeClick)
 
+        # Кнопка открытия списка домов -------
+        self.uiMwin.Btn_Home.clicked.connect(self.btnHomeClick)
         self.btnHomeStatusHide = False
         self.btnHomeClick()
-        #------------------------------------
-        self.uiMwin.Read_XML.clicked.connect(self.setXMLTable)
+        # ------------------------------------
 
+        self.uiMwin.Read_XML.clicked.connect(self.setXMLTable)
         self.uiMwin.Btn_CloseWindow.clicked.connect(self.appWin.closeAllWindows)
         self.uiMwin.pushButton_3.clicked.connect(self.CreateButtonsInfo)
 
@@ -79,6 +77,7 @@ class SetupMainWindow:
 
     def show(self):
         self.MainWindow.show()
+
     def exit(self):
         sys.exit(self.appWin.exec_())
 
@@ -102,8 +101,10 @@ class SetupMainWindow:
 
 
     def setXMLTable(self):
-        #Пересоздаем таблицу --------------------------------------------------------------------------------------
-        self.listNewButtonTableNumber.clear() #очищаем базу созднных кнопок
+
+        # Пересоздаем таблицу --------------------------------------------------------------------------------------
+
+        self.listNewButtonTableNumber.clear()  # очищаем базу созднных кнопок
         self.listNewButtonTableAddress.clear()  # очищаем базу созднных кнопок
         self.feedbackLogButton.clear()
 
@@ -111,63 +112,68 @@ class SetupMainWindow:
             self.takeXMLfile()
             self.takeXMLDatapointSubtype()
 
+        "' Очищаем заглавия '"
 
-        #Очищаем заглавия
         self.uiMwin.table_forLog.clear()
         self.uiMwin.table_forLog.setRowCount(0)
 
         labels = ['№', 'Name', 'Address', 'GateWay', 'Long/Short', 'Data Type', 'Day/Night', 'Toggle', 'Comments']
 
-        self.uiMwin.table_forLog.setColumnCount(len(labels)) #устанавливаем длинну таблицы
-        self.uiMwin.table_forLog.setHorizontalHeaderLabels(labels) #заполняем название столбцов
-        #----------------------------------------------------------------------------------------------------------
+        self.uiMwin.table_forLog.setColumnCount(len(labels))  # устанавливаем длинну таблицы
+        self.uiMwin.table_forLog.setHorizontalHeaderLabels(labels)  # заполняем название столбцов
 
-        indexRow = 0
-        NumberRowItem = 1
-        itsGroupName = False
+        # ----------------------------------------------------------------------------------------------------------
+
+        index_row = 0
+        number_row_item = 1
+        its_group_name = False
 
         for items in self.XMLGroupAddress:
-            row = self.uiMwin.table_forLog.rowCount() #получаем кол-во строк
-            self.uiMwin.table_forLog.setRowCount(row + 1) #создаем новою строку
+            row = self.uiMwin.table_forLog.rowCount()  # получаем кол-во строк
+            self.uiMwin.table_forLog.setRowCount(row + 1)  # создаем новою строку
             if 'RangeStart' in items:
-                itsGroupName = True
+                its_group_name = True
                 for it in range(len(labels)):
-                    colorItem = QTableWidgetItem()
-                    colorItem.setBackgroundColor(QColor(90, 90, 90))
-                    self.uiMwin.table_forLog.setItem(indexRow, it, colorItem)
+                    color_item = QTableWidgetItem()
+                    color_item.setBackgroundColor(QColor(90, 90, 90))
+                    self.uiMwin.table_forLog.setItem(index_row, it, color_item)
             else:
-                #Создаем новую кнопку в таблице для перехода в меню настройки
-                tableNewButtonXML(self, NumberRowItem,  self.listNewButtonTableNumber, NumberRowItem)
-                self.uiMwin.table_forLog.setCellWidget(indexRow, 0, self.listNewButtonTableNumber[NumberRowItem - 1])
-                tableNewButtonXML(self, NumberRowItem, self.listNewButtonTableAddress, items['Address'])
-                self.uiMwin.table_forLog.setCellWidget(indexRow, 2, self.listNewButtonTableAddress[NumberRowItem - 1])
-                #запоминаем адрес кнопки
-                self.feedbackLogButton[str(NumberRowItem)] = items['Address']
-                NumberRowItem += 1
+
+                # Создаем новую кнопку в таблице для перехода в меню настройки
+
+                tableNewButtonXML(self, number_row_item,  self.listNewButtonTableNumber, number_row_item)
+                self.uiMwin.table_forLog.setCellWidget(index_row, 0, self.listNewButtonTableNumber[number_row_item - 1])
+                tableNewButtonXML(self, number_row_item, self.listNewButtonTableAddress, items['Address'])
+                self.uiMwin.table_forLog.setCellWidget(index_row, 2, self.listNewButtonTableAddress[number_row_item - 1])
+
+                # запоминаем адрес кнопки
+
+                self.feedbackLogButton[str(number_row_item)] = items['Address']
+                number_row_item += 1
 
             if 'Name' in items:
-                if itsGroupName:
-                    colorItem = QTableWidgetItem()
-                    colorItem.setBackgroundColor(QColor(90, 90, 90))
-                    colorItem.setText(items['Name'])
-                    self.uiMwin.table_forLog.setItem(indexRow, 1, colorItem)
+                if its_group_name:
+                    color_item = QTableWidgetItem()
+                    color_item.setBackgroundColor(QColor(90, 90, 90))
+                    color_item.setText(items['Name'])
+                    self.uiMwin.table_forLog.setItem(index_row, 1, color_item)
                 else:
-                    self.uiMwin.table_forLog.setItem(indexRow, 1, QTableWidgetItem(items['Name']))
+                    self.uiMwin.table_forLog.setItem(index_row, 1, QTableWidgetItem(items['Name']))
 
             if 'DPTs' in items:
-                self.uiMwin.table_forLog.setItem(indexRow, 5, QTableWidgetItem(self.XMLDatapointSubtype[items['DPTs']]))
-                #self.uiMwin.table_forLog.setItem(indexRow, 5, QTableWidgetItem(items['DPTs']))
-            indexRow += 1
-            itsGroupName = False
+                self.uiMwin.table_forLog.setItem(index_row, 5, QTableWidgetItem(self.XMLDatapointSubtype[items['DPTs']]))
+
+                "self.uiMwin.table_forLog.setItem(index_row, 5, QTableWidgetItem(items['DPTs']))"
+
+            index_row += 1
+            its_group_name = False
 
 
     def takeXMLfile(self):
         self.XMLGroupAddress = parsXMLGroupAddress()
 
     def takeXMLDatapointSubtype(self):
-        tempItem = parsXMLDatapointSubtype()
-
-        for item in tempItem:
+        for item in parsXMLDatapointSubtype():
             self.XMLDatapointSubtype[item["Id"]] = item['Text']
 
     def btnHomeClick(self):
@@ -198,5 +204,5 @@ class SetupMainWindow:
         for it in date_it:
             self.ButtonsDate[it['Address']] = {"Address": it['Address'], "Name": it['Name'],
                                                "Scenes": "No1", "Home": "unknowed", "Floor": "unknowed", "Room": "unknowed",
-                                               "Comments": "some words"} # "Long/Short": 0, "Toggle": 0, "Day/Night": 0 }
+                                               "Comments": "some words"}  # "Long/Short": 0, "Toggle": 0, "Day/Night": 0 }
             print(self.ButtonsDate[it['Address']])
