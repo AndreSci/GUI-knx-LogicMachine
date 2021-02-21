@@ -68,6 +68,7 @@ class SetupMainWindow:
         self.uiMwin.pushButton_3.clicked.connect(self.CreateButtonsInfo)
 
     def MenuOpenClose(self):
+
         if self.MenuPositionClick == "Open":
             self.uiMwin.stackedWidget_MenuBar_1.setCurrentWidget(self.uiMwin.page_2)
             self.MenuPositionClick = "Close"
@@ -96,9 +97,8 @@ class SetupMainWindow:
     def changePageLogs(self):
         self.uiMwin.stackedWidget.setCurrentWidget(self.uiMwin.Page_Log)
 
-    def tableButtonClick(self, NumberRowItem):
+    def tableButtonClick(self, number_row_item):
         self.uiMwin.stackedWidget.setCurrentWidget(self.uiMwin.Page_settings)
-
 
     def setXMLTable(self):
 
@@ -167,7 +167,6 @@ class SetupMainWindow:
 
             index_row += 1
             its_group_name = False
-
 
     def takeXMLfile(self):
         self.XMLGroupAddress = parsXMLGroupAddress()
