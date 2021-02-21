@@ -19,7 +19,7 @@ def tableNewButtonXML(SetupMainWindow, NumberRowItem, listNewButtonTab, Name):
 
 
 def tableButtonProjectClick(SetupMainWindow, NumberRowItem):
-    pass
+    pass  # TODO
 
 
 def tableNewButtonProject(SetupMainWindow, NumberRowItem, listNewButtonTab, Name):

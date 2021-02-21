@@ -3,16 +3,16 @@ class User:
         self.user_name = user_name
         self.log_name = ""
 
-    def getProfileName(self):
+    def get_profile_name(self):
         return self.user_name
 
-    def getLogName(self):
+    def get_log_name(self):
         return self.log_name
 
-    def getPassword(self):    #реализовать в дальнейшем
+    def test_password(self):   # реализовать в дальнейшем
         return "admin"
 
-    def setProfileName(self, name):
+    def set_profile_name(self, name):
         self.log_name = name
         if name == "admin":
             self.user_name = "Admin"
