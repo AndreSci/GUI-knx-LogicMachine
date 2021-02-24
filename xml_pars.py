@@ -1,6 +1,10 @@
+###################################################################
+# The file is intended for getting data from the ETS project file #
+###################################################################
+
 from xml.etree import ElementTree
-import sys
 import re
+
 
 def ParsXMLFile():
     tree = ElementTree.parse("xml_files/xml_file.xml")
@@ -34,7 +38,7 @@ def CyclonFunc(items, Address, xmlReturn, attribName=list(), tag=list()):
 
 def CyclonFuncForButtons(items, address_area, address_line, xml_return, attrib_name=list(), tag=list()):
 
-    "' Area', 'Line', 'DeviceInstance'"
+    # ' Area', 'Line', 'DeviceInstance'
 
     for item in items:
 

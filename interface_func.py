@@ -161,7 +161,8 @@ class SetupMainWindow:
                     self.uiMwin.table_forLog.setItem(index_row, 1, QTableWidgetItem(items['Name']))
 
             if 'DPTs' in items:
-                self.uiMwin.table_forLog.setItem(index_row, 5, QTableWidgetItem(self.XMLDatapointSubtype[items['DPTs']]))
+                self.uiMwin.table_forLog.setItem(index_row, 5,
+                                                 QTableWidgetItem(self.XMLDatapointSubtype[items['DPTs']]))
 
                 "self.uiMwin.table_forLog.setItem(index_row, 5, QTableWidgetItem(items['DPTs']))"
 
