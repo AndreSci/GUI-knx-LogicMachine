@@ -31,26 +31,30 @@ def CyclonFunc(items, Address, xmlReturn, attribName=list(), tag=list()):
             xmlReturn.append(it_ready)
         CyclonFunc(item, Address,  xmlReturn, attribName, tag)    # функция вызывает саму себя
 
-def CyclonFuncForButtons(items, AddressArea, AddressLine, xmlReturn, attribName = list(), tag = list()):
-    "'Area', 'Line', 'DeviceInstance'"
+
+def CyclonFuncForButtons(items, address_area, address_line, xml_return, attrib_name=list(), tag=list()):
+
+    "' Area', 'Line', 'DeviceInstance'"
+
     for item in items:
+
         if item.tag == tag[0]:
-            AddressArea = "{}".format(item.attrib.get('Address'))
+            address_area = "{}".format(item.attrib.get('Address'))
         elif item.tag == tag[1]:
-            AddressLine = "{}".format(item.attrib.get('Address'))
+            address_area = "{}".format(item.attrib.get('Address'))
         elif item.tag == tag[2]:
             if len(item.attrib.get('Name')):
                 it_ready = dict()
                 it_ready['Name'] = item.attrib.get('Name')
-                it_ready['Address'] = "{}.{}.{}".format(AddressArea, AddressLine, item.attrib.get('Address'))
+                it_ready['Address'] = "{}.{}.{}".format(address_area, address_line, item.attrib.get('Address'))
 
-                xmlReturn.append(it_ready)
+                xml_return.append(it_ready)
 
-        CyclonFuncForButtons(item, AddressArea, AddressLine, xmlReturn, attribName, tag)    #функция вызывает саму себя
-
+        CyclonFuncForButtons(item, address_area, address_line, xml_return, attrib_name, tag)   # функция вызывает саму себя
 
 
 def getXMLmaster(fileName, NameList, tagNames, itemFind):
+
     xml_master_return = list()
 
     tree = ElementTree.parse(fileName)
@@ -60,39 +64,62 @@ def getXMLmaster(fileName, NameList, tagNames, itemFind):
     xmlns = xmlns.group(0)
     index = ""
 
-    tagNamesIn = list()
+    tag_names_in = list()
+
     for it in tagNames:
-        tagNamesIn.append(f'{xmlns}{it}')
+        tag_names_in.append(f'{xmlns}{it}')
 
     if itemFind == 'Buttons':
-        AddressArea = "0"
-        AddressLine = "0"
-        CyclonFuncForButtons(root, AddressArea, AddressLine, xml_master_return, NameList, tagNamesIn)
+        address_area = "0"
+        address_line = "0"
+        CyclonFuncForButtons(root, address_area, address_line, xml_master_return, NameList, tag_names_in)
     else:
-        CyclonFunc(root, index, xml_master_return, NameList, tagNamesIn)
-
-    #for it in xml_master_return:
-      #  print("{} === {}".format(it[NameList[0]], it[NameList[1]]))
-
+        CyclonFunc(root, index, xml_master_return, NameList, tag_names_in)
 
     return xml_master_return
 
 
-def parsXMLGroupAddress(fileName = "xml_files/xml_file.xml" ):
-    NameList = ["Address", "Name"]  #Имена что ищем в файле (принимает 2 аргумента) поиск осуществляется по первому аргументу (встречается случай когда адрес есть а имени нет)
-    tagNames = ['GroupRange', 'GroupAddress'] #Тэги в которых искать нужные адреса (охват по желанию)
-    return getXMLmaster(fileName, NameList, tagNames, "")
+def parsXMLGroupAddress(file_name="xml_files/xml_file.xml"):
+
+    name_list = ["Address", "Name"]  # Имена что ищем в файле (принимает 2 аргумента) поиск осуществляется \
+                                     # по первому аргументу (встречается случай когда адрес есть а имени нет)
+    tag_names = ['GroupRange', 'GroupAddress']  # Тэги в которых искать нужные адреса (охват по желанию)
+
+    xml_master_return = getXMLmaster(file_name, name_list, tag_names, "")
+    print_xml_info(xml_master_return, name_list)
+
+    return xml_master_return
+
 
 def parsXMLDatapointSubtype(fileName = "xml_files/knx_master.xml"):
-    NameList = ["Id", "Text"]
-    tagNames = ['DatapointType', 'DatapointSubtype']
-    return getXMLmaster(fileName, NameList, tagNames, "")
+
+    name_list = ["Id", "Text"]
+    tag_names = ['DatapointType', 'DatapointSubtype']
+
+    xml_master_return = getXMLmaster(fileName, name_list, tag_names, "")
+    print_xml_info(xml_master_return, name_list)
+
+    return xml_master_return
+
 
 def parsXMLButtons(fileName = "xml_files/xml_buttons.xml"):
+
     name_list = ["Address", "Name"]
     tag_names = ['Area', 'Line', 'DeviceInstance']
-    return getXMLmaster(fileName, name_list, tag_names, "Buttons")
 
-#parsXMLDatapointSubtype()
-#parsXMLGroupAddress()
-#parsXMLButtons()
+    xml_master_return = getXMLmaster(fileName, name_list, tag_names, "Buttons")
+    print_xml_info(xml_master_return, name_list)
+
+    return xml_master_return
+
+
+def print_xml_info(xml_master_return, name_list):
+    for it in xml_master_return:
+        print("{} === {}".format(it[name_list[0]], it[name_list[1]]))
+
+
+if __name__ == "__main__":
+
+    # parsXMLDatapointSubtype()
+    # parsXMLGroupAddress()
+    parsXMLButtons()

@@ -22,20 +22,20 @@ class AllBase:
         return return_date
 
     def save_change_date(self, new_date):  # take list(dict())
-        RANGE_IT = len(self.baseAllDate)  # константа размер для прохождения цикла
-        change_d = False
+
+        not_change_d = True
+
         for it in new_date:
 
-            for item in range(RANGE_IT):
+            for item in range(len(self.baseAllDate)):
                 if self.baseAllDate[item]['Address'] == it['Address']:
                     self.baseAllDate[item] = it
-                    change_d = True
+                    not_change_d = False
                     break
 
-                if not change_d:
-                    self.baseAllDate.append(it)
-
-                change_d = False
+            if not_change_d:
+                self.baseAllDate.append(it)
+            not_change_d = True
 
     def print_base(self):
         for item in self.baseAllDate:
@@ -43,9 +43,7 @@ class AllBase:
 
 
 def take_project():
-    project = dict()
-    project = {}
-    return project
+    pass  # TODO
 
 
 "#test -------------------------------------------------------------"
@@ -72,17 +70,17 @@ def test_01():
     item2 = list()
 
     item2.append({'Address': '0/1/3', 'Name': 'name_3', 'Class': 'button',
-                 'Data Type': 'Type', 'Toggle': 'yes', 'Long/Short': 'long',
+                 'Data Type': 'Type', 'Toggle': 'no', 'Long/Short': 'long',
                   'Home': 'unknown', 'Floor': 'unknown', 'Room': 'unknown',
                   'Comments': 'some words'})
 
     item2.append({'Address': '0/1/4', 'Name': 'name_4', 'Class': 'button',
-                 'Data Type': 'Type', 'Toggle': 'yes', 'Long/Short': 'long',
+                 'Data Type': 'Type', 'Toggle': 'no', 'Long/Short': 'long',
                   'Home': 'unknown', 'Floor': 'unknown', 'Room': 'unknown',
                   'Comments': 'some words'})
 
     item2.append({'Address': '0/1/1', 'Name': 'name_1', 'Class': 'button',
-                 'Data Type': 'Type', 'Toggle': 'yes', 'Long/Short': 'long',
+                 'Data Type': 'Type', 'Toggle': 'no', 'Long/Short': 'long',
                   'Home': 'unknown', 'Floor': 'unknown', 'Room': 'unknown',
                   'Comments': 'some words'})
 
@@ -90,8 +88,9 @@ def test_01():
     main_date.print_base()
 
 
-"#-----------------------------------------------------------------------"
+"#------------------------------------------------------------------"
 
 
-test_01()
+if __name__ == "__main__":
+    test_01()
 
